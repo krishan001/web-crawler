@@ -21,6 +21,7 @@ def build():
     dict_text = {}
    
     for page in page_list:
+        # Get the html
         url_new = requests.get(base_url.__add__(page))
         # HTML parser
         soup_new = BeautifulSoup(url_new.content, 'html.parser')
@@ -40,8 +41,8 @@ def build():
                     dict_text[word][page] += 1
                 else:
                     dict_text[word].update({page: 1})
-
-        time.sleep(1)
+        # make a request every 5 seconds
+        time.sleep(5)
         try:
             link_new_body = soup_new.find('body')
             for link_new in link_new_body.find_all('a'):
@@ -82,7 +83,7 @@ def find(arguments,data):
     i = 0
     while(i < num_arguments):
         word = arguments[i]
-        print(word)
+        # print(word)
         # add all the pages for a particular word
         for url in data[word]:
             # print(data[word][url])
@@ -111,6 +112,8 @@ def rank(arguments, data, page_list):
     # sorts the dictionary so that the highest number is first
     sorted_dict = {k: v for k, v in sorted(rank_dict.items(), key=lambda item:item[1], reverse = True)}
     for k,v in sorted_dict.items():
+        counter+=1
+        print(counter, ") ", end = "")
         print(k,v)
         
     pass
@@ -123,14 +126,15 @@ def main():
     print(" print [word] - takes in a word and displays the inverted index for that word")
     print(" find [query phrase] - finds a certain query phrase in the inverted index and returns a list of all pages containing this phrase ")
     while True:
-        user_input = input("\n\nEnter a command: ")
 
+        user_input = input("\n\nEnter a command: ")
         user_input_split = user_input.split()
+
         # builds the index
         if user_input_split[0] == "build":
             start = timer()
             dict_text = build()
-            print(dict_text)
+            # print(dict_text)
             try:
                 with open('index.json', 'w') as fp:
                     json.dump(dict_text, fp)
@@ -138,6 +142,7 @@ def main():
                 print("Build not complete, no file to save")
             end = timer()
             print(end - start)
+        
         # loads the index
         elif user_input_split[0] == "load":
             try:
@@ -159,6 +164,8 @@ def main():
                 find(user_input_split[1:], data)
             except:
                 print("error")
+        else:
+            print("Invalid command")
 
 if __name__ == '__main__':
     main()
