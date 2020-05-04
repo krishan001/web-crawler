@@ -18,15 +18,15 @@ def build():
     base_url = "http://example.webscraping.com"
 
     page_list = ["/"]
-    dict_text = {}
+    page_dict = {}
    
     for page in page_list:
         # Get the html
         url_new = requests.get(base_url.__add__(page))
         # HTML parser
-        soup_new = BeautifulSoup(url_new.content, 'html.parser')
+        soup = BeautifulSoup(url_new.content, 'html.parser')
 
-        texts = soup_new.find_all(text=True)
+        texts = soup.find_all(text=True)
         visible_texts = filter(visible, texts)
         text = " ".join(t.strip() for t in visible_texts)
 
@@ -34,17 +34,17 @@ def build():
         # add words to dictionary with their frequency
         for word in words:
             word = word.replace(":","")
-            if word not in dict_text:
-                dict_text[word] = {page: 1}
+            if word not in page_dict:
+                page_dict[word] = {page: 1}
             else:
-                if page in dict_text[word]:
-                    dict_text[word][page] += 1
+                if page in page_dict[word]:
+                    page_dict[word][page] += 1
                 else:
-                    dict_text[word].update({page: 1})
+                    page_dict[word].update({page: 1})
         # make a request every 5 seconds
         time.sleep(5)
         try:
-            link_new_body = soup_new.find('body')
+            link_new_body = soup.find('body')
             for link_new in link_new_body.find_all('a'):
 
                 if link_new.get('href') == "#":
@@ -63,11 +63,10 @@ def build():
     with open("pages.txt", 'w') as f:
         for item in page_list:
             f.write("%s\n" % item)
-    return dict_text
+    return page_dict
 
 
 def search(keyword, data):
-    # print(data[keyword])
     print("\n")
     for url in data[keyword]:
         print(url, " ", end = "")
