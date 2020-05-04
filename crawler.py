@@ -97,7 +97,10 @@ def find(arguments,data):
         temp_list = []
         i+=1
     # list of pages that are shared by all the arguments
-    rank(arguments, data, page_list)
+    if len(page_list) == 0:
+        print("There are no pages that contain all of these words")
+    else:
+        rank(arguments, data, page_list)
 
 def rank(arguments, data, page_list):
     counter = 0
