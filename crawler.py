@@ -48,7 +48,7 @@ def build():
 
                 if link_new.get('href') == "#":
                     continue
-                # link_new = link_new.get("href").split("?")[0].split("index")[0].split("iso")[0].split("edit")[0]
+
                 link_new = link_new.get("href").split("?")[0].split("edit")[0]
 
                 if link_new not in page_list:
