@@ -4,7 +4,6 @@ import requests
 import time
 from timeit import default_timer as timer
 import json
-from collections import Counter
 
 def visible(element):
     if element.parent.name in ['style', 'script', 'head', 'title', 'meta', '[document]']:
@@ -136,7 +135,6 @@ def main():
         if user_input_split[0] == "build":
             start = timer()
             dict_text = build()
-            # print(dict_text)
             try:
                 with open('index.json', 'w') as fp:
                     json.dump(dict_text, fp)
@@ -153,6 +151,7 @@ def main():
 
             except:
                 print("file does not exist, run build")
+       
         # prints out
         elif user_input_split[0] == "print":
             try:
